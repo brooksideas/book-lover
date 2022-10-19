@@ -64,10 +64,12 @@ class BookLover:
         # Check if rating is in the integer from 0 to 5
         if rating not in range(0, 6, 1) or not isinstance(rating, int):
             raise Exception("Rating should be an integer in the range from 0 to 5. Rating ", rating, "is out of range.")
+
         # Check if the Book exists in the book list Dataframe
-        found = self.book_list['book_rating'].where(self.book_list['book_name'] == book_name.strip().lower())
-        if len(found) != 0 and not math.isnan(found.array[0]):
-            raise Exception(f"Book already exists with a rating of {found[0]}.")
+        if len(self.book_list) != 0:
+            matches = set(self.book_list['book_name'].str.lower()).intersection(set([book_name.strip().lower()]))
+            if len(matches) != 0:
+                raise ValueError("Book already exists.")
 
         # Add the new book to the Dataframe
         added_book = pd.DataFrame({
@@ -95,23 +97,27 @@ class BookLover:
 
 # For Test Use cases
 if __name__ == '__main__':
+    book = BookLover("Brook", "rnc3mm@virginia.com", "Romance-drama")
+    # book.add_book("The Best of me", 5)
+    # book.add_book("the best of me", 4)
+    # book.book_list
     # book = BookLover("Han Solo", "popular_website15", "scifi")
-    book = BookLover("Emegua", "Wrongemails@gmail.com", "scifi") # Wrongemails@122.com" Wrongemails@122.122"
-
-    book.add_book("War of the Worlds", 4)
-
-    book.add_book("new book", 5)
-    book.add_book("NEW BOOK", 3.1)
-    book.add_book("NEW BOOKs", 5)
+    # book = BookLover("Emegua", "Wrongemails@gmail.com", "scifi")  # Wrongemails@122.com" Wrongemails@122.122"
+    #
+    # book.add_book("War of the Worlds", 4)
+    #
+    # book.add_book("new book", 5)
+    # book.add_book("NEW BOOK", 4)
+    # book.add_book("NEW BOOKs", 5)
     # book.add_book("new book", 3)
     # book.add_book("new books", 3)
     # book.add_book(1.2, 3)
 
     # book.has_read(2)
     # book.has_read("New book")
-    # book.has_read("  new book  ")
+    # book.has_read("  New book  ")
     # print(book.has_read("new book"))
 
     # print(book.num_books_read())
 
-    book.fav_books()
+    # book.fav_books()
