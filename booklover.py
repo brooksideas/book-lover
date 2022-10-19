@@ -71,3 +71,26 @@ class BookLover:
 
     def fav_books(self):
         print(self.book_list[self.book_list['book_rating'] > 3])
+
+
+# For Test Use cases
+if __name__ == '__main__':
+    book = BookLover("Han Solo", "hsolo@millenniumfalcon.com", "scifi")  # (1, "Wrongemails", 2.2)
+
+    book.add_book("War of the Worlds", 4)
+
+    book.add_book("new book", 5)
+    book.add_book("NEW BOOK", 3.1)
+    book.add_book("NEW BOOKs", 5)
+    # book.add_book("new book", 3)
+    # book.add_book("new books", 3)
+    # book.add_book(1.2, 3)
+
+    # book.has_read(2)
+    # book.has_read("New book")
+    # book.has_read("  new book  ")
+    # print(book.has_read("new book"))
+
+    # print(book.num_books_read())
+
+    book.fav_books()
