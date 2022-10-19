@@ -85,39 +85,18 @@ class BookLover:
             raise Exception("Book name should be a string.")
 
         # Check if it is present
-        found = book_name.strip().lower() in self.book_list['book_name'].unique()
+        found = book_name.strip().lower() == self.book_list['book_name'].str.lower()
         return found
 
     def num_books_read(self):
         return len(self.book_list.index)
 
     def fav_books(self):
-        print(self.book_list[self.book_list['book_rating'] > 3])
+        # ret = self.book_list[self.book_list['book_rating'] > 3]
+        # xx = ret["book_rating"]
+        return self.book_list[self.book_list['book_rating'] > 3]
 
 
 # For Test Use cases
 if __name__ == '__main__':
     book = BookLover("Brook", "rnc3mm@virginia.com", "Romance-drama")
-    # book.add_book("The Best of me", 5)
-    # book.add_book("the best of me", 4)
-    # book.book_list
-    # book = BookLover("Han Solo", "popular_website15", "scifi")
-    # book = BookLover("Emegua", "Wrongemails@gmail.com", "scifi")  # Wrongemails@122.com" Wrongemails@122.122"
-    #
-    # book.add_book("War of the Worlds", 4)
-    #
-    # book.add_book("new book", 5)
-    # book.add_book("NEW BOOK", 4)
-    # book.add_book("NEW BOOKs", 5)
-    # book.add_book("new book", 3)
-    # book.add_book("new books", 3)
-    # book.add_book(1.2, 3)
-
-    # book.has_read(2)
-    # book.has_read("New book")
-    # book.has_read("  New book  ")
-    # print(book.has_read("new book"))
-
-    # print(book.num_books_read())
-
-    # book.fav_books()
