@@ -1,0 +1,214 @@
+     1	#########################
+     2	# File name booklover.py#
+     3	#########################
+     4	import pandas as pd
+     5	import re
+     6	
+     7	"""
+     8	Student Info 
+     9	Name: Brook Tarekegn Assefa
+    10	Net UD: rnc3mm
+    11	URL of this file in GitHub:  https://github.com/brooksideas/DS5100-2022-08-rnc3mm/tree/main/lessons/M08
+    12	"""
+    13	
+    14	
+    15	class BookLover:
+    16	    """
+    17	    PURPOSE:
+    18	    A class to identify a Book Lover.
+    19	
+    20	    ATTRIBUTES:
+    21	    name: The name of the person (type:string)
+    22	    email: The person’s email, serving as a unique identifier (type:string)
+    23	    fav_genre: The person’s favorite book genre (e.g., mystery, fantasy, or historical fiction). (type:string)
+    24	    num_books: Keeps track of the number of books the person has read (type:int)
+    25	    book_list: a dataframe with the columns ['book_name', 'book_rating']
+    26	
+    27	    METHODS:
+    28	    __init__ : Initialize with the three required attributes (name, email, and fav_genre) and two optional ones
+    29	    (num_books and book_list).
+    30	    add_book: Takes two arguments book_name and rating and add the book to the user list if it does not exist
+    31	    has_read:  This function takes book_name (string) as input and determines if the person has read the book.
+    32	    num_books_read:  This function takes no parameters and just returns the total number of books the person has read.
+    33	    fav_books: This function takes no parameters and returns the filtered dataframe of the person’s most favorite books.
+    34	    -------------------------------------------------------------------------
+    35	    """
+    36	
+    37	    name = ""
+    38	    email = ""
+    39	    fav_genre = ""
+    40	    num_books = 0
+    41	    book_list = pd.DataFrame({'book_name': [], 'book_rating': []})
+    42	
+    43	    def __init__(self, name, email, fav_genre, num_books=num_books, book_list=book_list):
+    44	        # Check book name is a string
+    45	        if not isinstance(name, str):
+    46	            raise TypeError("Book name should be a string.")
+    47	
+    48	        # Check that email is correct
+    49	        # for validating an Email
+    50	        regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z.-]+\.[A-Z|a-z]{2,}\b'
+    51	        if not (re.fullmatch(regex, email)):
+    52	            raise TypeError("The email passed is Invalid.")
+    53	
+    54	        # Check book favorite genre is a string
+    55	        if not isinstance(fav_genre, str):
+    56	            raise TypeError("Book favorite genre should be a string.")
+    57	
+    58	        # Number of books should be Int
+    59	        if not isinstance(num_books, int):
+    60	            raise TypeError("The number of Books passed should be an integer.")
+    61	        # Check if the book list passed is a Data frame
+    62	        if not isinstance(book_list, pd.DataFrame):
+    63	            raise TypeError("The book list should be a Dataframe.")
+    64	
+    65	        self.name = name
+    66	        self.email = email
+    67	        self.fav_genre = fav_genre
+    68	        self.num_books = num_books
+    69	        self.book_list = book_list
+    70	
+    71	    def add_book(self, book_name, rating):
+    72	
+    73	        # Check if rating is in the integer from 0 to 5
+    74	        if rating not in range(0, 6, 1) or not isinstance(rating, int):
+    75	            raise ValueError("Rating should be an integer in the range from 0 to 5. Rating ", rating,
+    76	                             "is out of range.")
+    77	
+    78	        # Check if the Book exists in the book list Dataframe
+    79	        if len(self.book_list) != 0:
+    80	            matches = set(self.book_list['book_name'].str.lower()).intersection(set([book_name.strip().lower()]))
+    81	            if len(matches) != 0:
+    82	                raise ValueError("Book already exists.")
+    83	
+    84	        # Add the new book to the Dataframe
+    85	        added_book = pd.DataFrame({
+    86	            'book_name': [book_name],
+    87	            'book_rating': [rating]
+    88	        })
+    89	
+    90	        self.book_list = pd.concat([self.book_list, added_book], ignore_index=True)
+    91	
+    92	    def has_read(self, book_name):
+    93	        # Check book name is a string
+    94	        if not isinstance(book_name, str):
+    95	            raise TypeError("Book name should be a string.")
+    96	
+    97	        # Check if it is present
+    98	        found = book_name.strip().lower() == self.book_list['book_name'].str.lower()
+    99	        return found
+   100	
+   101	    def num_books_read(self):
+   102	        return len(self.book_list.index)
+   103	
+   104	    def fav_books(self):
+   105	        # ret = self.book_list[self.book_list['book_rating'] > 3]
+   106	        # xx = ret["book_rating"]
+   107	        return self.book_list[self.book_list['book_rating'] > 3]
+   108	
+   109	
+   110	if __name__ == '__main__':
+   111	    book = BookLover("Brook", "rnc3mm@virginia.com", "Romance-drama")
+   112	##############################
+   113	# File name booklover_test.py#
+   114	##############################
+   115	import unittest
+   116	from booklover import BookLover
+   117	
+   118	
+   119	class BookLoverTestSuite(unittest.TestCase):
+   120	
+   121	    def test_1_add_book(self):
+   122	        # add a book and test if it is in `book_list`.
+   123	        book = BookLover("Brook", "rnc3mm@virginia.com", "Romance-drama")
+   124	        book.add_book("The Best of me", 5)
+   125	        actual = book.book_list["book_name"][0]
+   126	        expected = "The Best of me"
+   127	        self.assertEqual(actual, expected)
+   128	
+   129	    def test_2_add_book(self):
+   130	        # add the same book twice. Test if it's in `book_list` only once.
+   131	        book = BookLover("Brook", "rnc3mm@virginia.com", "Romance-drama")
+   132	        book.add_book("The Best of me", 5)
+   133	        # Second duplication error is raised
+   134	        with self.assertRaises(ValueError) as exception_context:
+   135	            book.add_book("The Best of me", 4)
+   136	        self.assertEqual(
+   137	            str(exception_context.exception),
+   138	            "Book already exists."
+   139	        )
+   140	        actual = len(book.book_list.index)
+   141	        expected = 1
+   142	        self.assertTrue(actual == expected)  # Check it is only added once
+   143	
+   144	    def test_3_has_read(self):
+   145	        # pass a book in the list and test if the answer is `True`.
+   146	        book = BookLover("Brook", "rnc3mm@virginia.com", "Romance-drama")
+   147	        book.add_book("The Best of me", 5)
+   148	        book.book_list
+   149	        # Correctly passed value
+   150	        actual = book.has_read("The Best of me")
+   151	        self.assertTrue(actual[0])
+   152	
+   153	    def test_4_has_read(self):
+   154	        # pass a book NOT in the list and use `assert False` to test the answer is `True`
+   155	        # pass a book in the list and test if the answer is `True`.
+   156	        book = BookLover("Brook", "rnc3mm@virginia.com", "Romance-drama")
+   157	        book.add_book("The Best of me", 5)
+   158	        book.book_list
+   159	        # Correctly passed value
+   160	        actual = book.has_read("Introduction to DS")
+   161	        self.assertFalse(actual[0])
+   162	
+   163	    def test_5_num_books_read(self):
+   164	        # add some books to the list, and test num_books matches expected.
+   165	        book = BookLover("Brook", "rnc3mm@virginia.com", "Romance-drama")
+   166	        book.add_book("The Best of me", 5)
+   167	        book.add_book("Introduction to DS", 4)
+   168	        book.add_book("Fundamentals to CS", 2)
+   169	        actual = book.num_books_read()
+   170	        expected = 3
+   171	        self.assertEqual(actual, expected)
+   172	
+   173	    def test_6_fav_books(self):
+   174	        # add some books with ratings to the list, making sure some of them have rating > 3.
+   175	        # Your test should check that the returned books have rating  > 3
+   176	        book = BookLover("Brook", "rnc3mm@virginia.com", "Romance-drama")
+   177	        book.add_book("The Best of me", 5)
+   178	        book.add_book("Introduction to DS", 4)
+   179	        book.add_book("Fundamentals to CS", 2)
+   180	        actual = len(book.fav_books())  # Must have at least one book rated over 3
+   181	        expected = 1
+   182	        self.assertGreaterEqual(actual, expected)
+   183	
+   184	
+   185	if __name__ == '__main__':
+   186	    unittest.main(verbosity=3)
+   187	#################################
+   188	# Commands executed from rivanna#
+   189	#################################
+   190	#  rivanna$ python booklover_test.py
+   191	#  rivanna$ python booklover_test.py 2> booklover_results.txt
+   192	#  rivanna$ cat -n booklover.py booklover_test.py booklover_results.txt > HW08.txt
+   193	#  rivanna$ module load ghostscript
+   194	#  rivanna$ pdfroff --pdf-output=HW08.pdf HW08.txt
+   195	
+   196	#############
+   197	# File names#
+   198	#############
+   199	# booklover.py
+   200	# booklover_test.py
+   201	# booklover_results.txt
+   202	# HW08.txt
+   203	# HW08.pdf
+   204	test_1_add_book (__main__.BookLoverTestSuite) ... ok
+   205	test_2_add_book (__main__.BookLoverTestSuite) ... ok
+   206	test_3_has_read (__main__.BookLoverTestSuite) ... ok
+   207	test_4_has_read (__main__.BookLoverTestSuite) ... ok
+   208	test_5_num_books_read (__main__.BookLoverTestSuite) ... ok
+   209	test_6_fav_books (__main__.BookLoverTestSuite) ... ok
+   210	
+   211	----------------------------------------------------------------------
+   212	Ran 6 tests in 0.007s
+   213	
+   214	OK

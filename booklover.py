@@ -1,10 +1,19 @@
+#########################
+# File name booklover.py#
+#########################
 import pandas as pd
-import math
 import re
+
+"""
+Student Info 
+Name: Brook Tarekegn Assefa
+Net UD: rnc3mm
+URL of this file in GitHub:  https://github.com/brooksideas/DS5100-2022-08-rnc3mm/tree/main/lessons/M08
+"""
 
 
 class BookLover:
-    '''
+    """
     PURPOSE:
     A class to identify a Book Lover.
 
@@ -23,7 +32,7 @@ class BookLover:
     num_books_read:  This function takes no parameters and just returns the total number of books the person has read.
     fav_books: This function takes no parameters and returns the filtered dataframe of the person’s most favorite books.
     -------------------------------------------------------------------------
-    '''
+    """
 
     name = ""
     email = ""
@@ -34,24 +43,24 @@ class BookLover:
     def __init__(self, name, email, fav_genre, num_books=num_books, book_list=book_list):
         # Check book name is a string
         if not isinstance(name, str):
-            raise Exception("Book name should be a string.")
+            raise TypeError("Book name should be a string.")
 
         # Check that email is correct
         # for validating an Email
         regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z.-]+\.[A-Z|a-z]{2,}\b'
         if not (re.fullmatch(regex, email)):
-            raise Exception("The email passed is Invalid.")
+            raise TypeError("The email passed is Invalid.")
 
         # Check book favorite genre is a string
         if not isinstance(fav_genre, str):
-            raise Exception("Book favorite genre should be a string.")
+            raise TypeError("Book favorite genre should be a string.")
 
         # Number of books should be Int
         if not isinstance(num_books, int):
-            raise Exception("The number of Books passed should be an integer.")
+            raise TypeError("The number of Books passed should be an integer.")
         # Check if the book list passed is a Data frame
         if not isinstance(book_list, pd.DataFrame):
-            raise Exception("The book list should be a Dataframe.")
+            raise TypeError("The book list should be a Dataframe.")
 
         self.name = name
         self.email = email
@@ -63,7 +72,8 @@ class BookLover:
 
         # Check if rating is in the integer from 0 to 5
         if rating not in range(0, 6, 1) or not isinstance(rating, int):
-            raise Exception("Rating should be an integer in the range from 0 to 5. Rating ", rating, "is out of range.")
+            raise ValueError("Rating should be an integer in the range from 0 to 5. Rating ", rating,
+                             "is out of range.")
 
         # Check if the Book exists in the book list Dataframe
         if len(self.book_list) != 0:
@@ -82,7 +92,7 @@ class BookLover:
     def has_read(self, book_name):
         # Check book name is a string
         if not isinstance(book_name, str):
-            raise Exception("Book name should be a string.")
+            raise TypeError("Book name should be a string.")
 
         # Check if it is present
         found = book_name.strip().lower() == self.book_list['book_name'].str.lower()
@@ -97,6 +107,5 @@ class BookLover:
         return self.book_list[self.book_list['book_rating'] > 3]
 
 
-# For Test Use cases
 if __name__ == '__main__':
     book = BookLover("Brook", "rnc3mm@virginia.com", "Romance-drama")
