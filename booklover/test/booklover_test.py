@@ -73,20 +73,3 @@ class BookLoverTestSuite(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main(verbosity=3)
-#################################
-# Commands executed from rivanna#
-#################################
-#  rivanna$ python booklover_test.py
-#  rivanna$ python booklover_test.py 2> booklover_results.txt
-#  rivanna$ cat -n booklover.py booklover_test.py booklover_results.txt > HW08.txt
-#  rivanna$ module load ghostscript
-#  rivanna$ pdfroff --pdf-output=HW08.pdf HW08.txt
-
-#############
-# File names#
-#############
-# booklover.py
-# booklover_test.py
-# booklover_results.txt
-# HW08.txt
-# HW08.pdf
