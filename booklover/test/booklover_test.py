@@ -2,7 +2,7 @@
 # File name booklover_test.py#
 ##############################
 import unittest
-from booklover import BookLover
+from booklover.booklover import BookLover
 
 
 class BookLoverTestSuite(unittest.TestCase):

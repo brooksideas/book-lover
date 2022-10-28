@@ -77,7 +77,7 @@ class BookLover:
 
         # Check if the Book exists in the book list Dataframe
         if len(self.book_list) != 0:
-            matches = set(self.book_list['book_name'].str.lower()).intersection(set([book_name.strip().lower()]))
+            matches = set(self.book_list['book_name'].str.lower()).intersection({book_name.strip().lower()})
             if len(matches) != 0:
                 raise ValueError("Book already exists.")
 
